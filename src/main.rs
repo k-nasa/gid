@@ -5,7 +5,7 @@ use graphql_client::{GraphQLQuery, Response};
     schema_path = "graphql/schema.docs.graphql",
     query_path = "graphql/query.graphql"
 )]
-pub struct MyQuery;
+pub struct IssueQuery;
 
 const GITHUB_URL: &str = "https://api.github.com/graphql";
 
@@ -24,12 +24,16 @@ async fn main() -> Result<(), anyhow::Error> {
         )
         .build()?;
 
-    let v = my_query::Variables;
-    let request_body = MyQuery::build_query(v);
+    let v = issue_query::Variables {
+        owner: "k-nasa".into(),
+        repository_name: "wai".into(),
+    };
+    let request_body = IssueQuery::build_query(v);
 
     let res = client.post(GITHUB_URL).json(&request_body).send().await?;
-    let response_body: Response<my_query::ResponseData> = res.json().await?;
-    let data = response_body.data.unwrap();
-    println!("{:?}", data.organization.unwrap().repository.unwrap().name);
+    let response_body: Response<issue_query::ResponseData> = res.json().await?;
+    let title = response_body.data.unwrap().repository.unwrap().issues;
+
+    println!("{:?}", title);
     Ok(())
 }
