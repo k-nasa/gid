@@ -1,3 +1,4 @@
+use async_recursion::async_recursion;
 use graphql_client::{GraphQLQuery, Response};
 
 #[derive(GraphQLQuery)]
@@ -8,6 +9,9 @@ use graphql_client::{GraphQLQuery, Response};
 pub struct IssueQuery;
 
 const GITHUB_URL: &str = "https://api.github.com/graphql";
+const ORG: &str = "k-nasa";
+const REPO: &str = "wai";
+const ROOT_ISSUE_NUMBER: i64 = 1486;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
@@ -24,9 +28,20 @@ async fn main() -> Result<(), anyhow::Error> {
         )
         .build()?;
 
+    fetch_tracked_issue(&client, ROOT_ISSUE_NUMBER).await?;
+
+    Ok(())
+}
+
+#[async_recursion]
+async fn fetch_tracked_issue(
+    client: &reqwest::Client,
+    root_issue: i64,
+) -> Result<(), anyhow::Error> {
     let v = issue_query::Variables {
-        owner: "k-nasa".into(),
-        repository_name: "wai".into(),
+        owner: ORG.into(),
+        repository_name: REPO.into(),
+        number: root_issue,
     };
     let request_body = IssueQuery::build_query(v);
 
@@ -37,13 +52,15 @@ async fn main() -> Result<(), anyhow::Error> {
         .unwrap()
         .repository
         .unwrap()
-        .issues
+        .issue
+        .unwrap()
+        .tracked_issues
         .nodes
         .unwrap()
-        .iter()
     {
         let i = i.as_ref().unwrap();
-        println!("{:?}", i.title);
+        println!("{} --> {}[\"{}\"]", root_issue, i.number, i.title);
+        fetch_tracked_issue(client, i.number).await?;
     }
 
     Ok(())
