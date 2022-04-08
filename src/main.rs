@@ -32,8 +32,19 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let res = client.post(GITHUB_URL).json(&request_body).send().await?;
     let response_body: Response<issue_query::ResponseData> = res.json().await?;
-    let title = response_body.data.unwrap().repository.unwrap().issues;
+    for i in response_body
+        .data
+        .unwrap()
+        .repository
+        .unwrap()
+        .issues
+        .nodes
+        .unwrap()
+        .iter()
+    {
+        let i = i.as_ref().unwrap();
+        println!("{:?}", i.title);
+    }
 
-    println!("{:?}", title);
     Ok(())
 }
