@@ -1,0 +1,19 @@
+query MyQuery {
+  organization(login: "nasa-playground") {
+    repository(name:"nasa-playground") {
+      name
+      issues(first: 1){
+        edges{
+          node{
+            title
+            trackedIssues(first: 10){
+              nodes {
+                title
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

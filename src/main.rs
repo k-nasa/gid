@@ -1,7 +1,10 @@
 use graphql_client::{GraphQLQuery, Response};
 
 #[derive(GraphQLQuery)]
-#[graphql(schema_path = "schema.json", query_path = "query.graphql")]
+#[graphql(
+    schema_path = "graphql/schema.docs.graphql",
+    query_path = "graphql/query.graphql"
+)]
 pub struct MyQuery;
 
 const GITHUB_URL: &str = "https://api.github.com/graphql";
