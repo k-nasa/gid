@@ -1,0 +1,100 @@
+name: 'Grasp issue dependencies'
+description: 'Help project managers and project owners with easy-to-understand views of github issue dependencies.'
+
+inputs:
+  label:
+    description: 'Analyze the issue with the specified label'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install gid
+      run: |
+        curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.0.0/gid_x86_64-apple-darwin.tar.gz
+        tar -zxvf gid.tar.gz
+        mv gid_x86_64-apple-darwin/gid /usr/local/bin
+
+    - uses: actions/github-script@v6
+      env:
+        GITHUB_ACCESS_TOKEN: '${{secrets.GITHUB_TOKEN}}'
+      with:
+        script: |
+          const query = `
+          query ($owner: String!, $name: String!, $label: String!) {
+            repository(owner: $owner, name: $name) {
+              issues(first: 100, labels: [$label], states: OPEN) {
+                nodes {
+                  number
+                }
+              }
+            }
+          }`;
+          const variables = {
+            owner: context.repo.owner,
+            name: context.repo.repo,
+            label: 'root'
+          }
+          const result = await github.graphql(query, variables)
+
+          for (const issue of result.repository.issues.nodes) {
+            const query = `
+            query ($owner: String!, $name: String!, $number: Int!) {
+              repository(owner: $owner, name: $name) {
+                issue(number: $number) {
+                  comments(first: 100) {
+                    nodes {
+                      databaseId
+                      body
+                    }
+                  }
+                }
+              }
+            }`;
+
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              number: issue.number
+            }
+
+            const result = await github.graphql(query, variables)
+            let id = null;
+            for (const comment of result.repository.issue.comments.nodes) {
+              if(comment.body.includes("/generate_gid")) {
+                id = comment.databaseId
+              }
+            }
+
+            const { exec } = require("child_process");
+            const command = `gid -o ${context.repo.owner} -r ${context.repo.repo} -i ${issue.number}`
+            exec(command, (error, stdout, stderr) => {
+              if (error) {
+                  console.log(`error: ${error.message}`);
+                  return;
+              }
+              if (stderr) {
+                  console.log(`stderr: ${stderr}`);
+                  return;
+              }
+              const mermaid = `${stdout}`;
+
+              if (id === null) {
+                console.log("add new comment", mermaid);
+                github.rest.issues.createComment({
+                  issue_number: issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `/generate_gid\n${mermaid}`
+                })
+              } else {
+                console.log("update comment", mermaid);
+                github.rest.issues.updateComment({
+                  comment_id: id,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `/generate_gid\n${mermaid}`
+                })
+              }
+            });
+          }
