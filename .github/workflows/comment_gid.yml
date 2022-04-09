@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install gid
-      - run: |
-        curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.0.0/gid_x86_64-unknown-linux-gnu.tar.gz
-        tar -zxvf gid.tar.gz
-        mv gid_x86_64-unknown-linux-gnu/gid /usr/local/bin
+        run: |
+          curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.0.0/gid_x86_64-unknown-linux-gnu.tar.gz
+          tar -zxvf gid.tar.gz
+          mv gid_x86_64-unknown-linux-gnu/gid /usr/local/bin
 
 
       - uses: actions/github-script@v6
