@@ -32,7 +32,7 @@ jobs:
 
             for (const issue of result.repository.issues.nodes) {
               const query = `
-              query ($owner: String!, $name: String!, $number Int!) {
+              query ($owner: String!, $name: String!, $number: Int!) {
                 repository(owner: $owner, name: $name) {
                   issue(number: $number) {
                     comments(first: 100) {
