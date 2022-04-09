@@ -37,7 +37,7 @@ jobs:
                   issue(number: $number) {
                     comments(first: 100) {
                       nodes {
-                        comment
+                        id
                         body
                       }
                     }
