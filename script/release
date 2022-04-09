@@ -3,7 +3,7 @@
 # Usage: ./release version GITHUB_TOKEN
 
 
-CRATE_NAME=ig
+CRATE_NAME=gid
 MISC="README.md LICENSE"
 
 info () {
