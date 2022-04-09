@@ -299,6 +299,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "gid"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-recursion",
+ "clap",
+ "graphql_client",
+ "reqwest",
+ "serde",
+ "tokio",
+]
+
+[[package]]
 name = "gimli"
 version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -517,19 +530,6 @@ name = "ipnet"
 version = "2.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "35e70ee094dc02fd9c13fdad4940090f22dbd6ac7c9e7094a46cf0232a50bc7c"
-
-[[package]]
-name = "issue-graph"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-recursion",
- "clap",
- "graphql_client",
- "reqwest",
- "serde",
- "tokio",
-]
 
 [[package]]
 name = "itoa"
