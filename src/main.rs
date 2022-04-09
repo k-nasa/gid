@@ -141,14 +141,14 @@ async fn _fetch_tracked_issue(
     // FIXME unwrap地獄を修正したい
     for i in response_body
         .data
-        .unwrap()
+        .expect("Response is None")
         .repository
-        .unwrap()
+        .expect("Not found repository")
         .issue
-        .unwrap()
+        .expect("Not found issue")
         .tracked_issues
         .nodes
-        .unwrap()
+        .expect("Not found tracked issues")
     {
         let i = i.as_ref().unwrap();
 
