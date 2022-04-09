@@ -71,6 +71,7 @@ graph LR
 ```"#;
 
     let mut body = String::new();
+    let mut links = String::new();
     for (number, issues) in issue_map {
         for issue in issues {
             let t = format!(
@@ -81,10 +82,12 @@ graph LR
                 state = issue.state
             );
             body += &t;
+
+            links += &format!("{}\n", issue.url);
         }
     }
 
-    format!("{}\n{}", head, body)
+    format!("{}\n{}\n{}", head, body, links)
 }
 
 #[async_recursion]
