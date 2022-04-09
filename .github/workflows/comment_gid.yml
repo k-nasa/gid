@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/github-script@v6
         env:
-          GITHUB_ACCESS_TOKEN: '${{secret.GITHUB_TOKEN}}'
+          GITHUB_ACCESS_TOKEN: '${{secrets.GITHUB_TOKEN}}'
         with:
           script: |
             const query = `
