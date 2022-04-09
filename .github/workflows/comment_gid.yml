@@ -33,4 +33,3 @@ jobs:
             for (const issue of result.repository.issues.nodes) {
               console.log(issue)
             }
-          }
