@@ -7,6 +7,16 @@ Help project managers and project owners with easy-to-understand views of github
 
 ## Usage
 
+## Install
+
+
+```sh
+curl -L -o ig.tar.gz https://github.com/k-nasa/goku/releases/download/0.1.1/ig_x86_64-apple-darwin.tar.gz
+tar -zxvf ig.tar.gz
+
+# Move binary file to the path
+```
+
 ## Contribution
 
 1. Fork it (http://github.com/k-nasa/ig)
