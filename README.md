@@ -25,7 +25,7 @@ jobs:
     name: Grasp issue dependencies
     steps:
       - uses: actions/checkout@v3
-      - uses: k-nasa/gid@master
+      - uses: k-nasa/gid@main
         with:
           label: 'root' # Analyze the issue with the specified label
 ```
