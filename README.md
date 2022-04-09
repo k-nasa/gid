@@ -50,6 +50,7 @@ TBW
 
 ## Install
 
+curl
 
 ```sh
 curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.1.0/gid_x86_64-apple-darwin.tar.gz
@@ -57,6 +58,13 @@ tar -zxvf gid.tar.gz
 
 # Move binary file to the path
 mv gid_x86_64-apple-darwin/gid /usr/local/bin
+```
+
+cargo
+
+
+```sh
+cargo install --git https://github.com/k-nasa/gid.git
 ```
 
 ## Contribution
