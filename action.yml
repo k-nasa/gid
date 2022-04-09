@@ -5,11 +5,15 @@ inputs:
   label:
     description: 'Analyze the issue with the specified label'
     required: true
+  github_token:
+    description: 'GitHub Access Token'
+    required: true
 
 runs:
   using: "composite"
   steps:
     - name: Install gid
+      shell: bash
       run: |
         curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.0.0/gid_x86_64-apple-darwin.tar.gz
         tar -zxvf gid.tar.gz
@@ -17,7 +21,8 @@ runs:
 
     - uses: actions/github-script@v6
       env:
-        GITHUB_ACCESS_TOKEN: '${{secrets.GITHUB_TOKEN}}'
+        LABEL: '${{ inputs.label }}'
+        GITHUB_ACCESS_TOKEN: ${{ inputs.github_token }}
       with:
         script: |
           const query = `
@@ -30,10 +35,11 @@ runs:
               }
             }
           }`;
+          const {LABEL} = process.env
           const variables = {
             owner: context.repo.owner,
             name: context.repo.repo,
-            label: 'root'
+            label: LABEL
           }
           const result = await github.graphql(query, variables)
 
