@@ -54,7 +54,7 @@ jobs:
               const result = await github.graphql(query, variables)
               let id = null;
               for (const comment of result.repository.issue.comments.nodes) {
-                if(comment.body.include("GENERATED GID")) {
+                if(comment.body.includes("GENERATED GID")) {
                   id = comment.id
                 }
               }
