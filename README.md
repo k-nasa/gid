@@ -2,6 +2,11 @@
 
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
 
+## DEMO
+
+
+## Usage
+
 ## Contribution
 
 1. Fork it (http://github.com/k-nasa/ig)
