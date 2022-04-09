@@ -35,7 +35,6 @@ jobs:
               label: 'root'
             }
             const result = await github.graphql(query, variables)
-            console.log(result)
 
             for (const issue of result.repository.issues.nodes) {
               const query = `
@@ -66,7 +65,7 @@ jobs:
                 }
               }
 
-              let mermaid = "";
+              var mermaid = "";
 
               const { exec } = require("child_process");
               const command = `gid -o ${context.repo.owner} -r ${context.repo.repo} -i ${issue.number}`
@@ -83,6 +82,7 @@ jobs:
               });
 
               if (id !== null) {
+                console.log("add new comment", mermaid);
                 github.rest.issues.updateComment({
                   comment_id: id,
                   owner: context.repo.owner,
@@ -90,6 +90,7 @@ jobs:
                   body: `/generate_gid\n${mermaid}`
                 })
               } else {
+                console.log("update comment", mermaid);
                 github.rest.issues.createComment({
                   issue_number: issue.number,
                   owner: context.repo.owner,
