@@ -43,8 +43,9 @@ install_rgh() {
 build_all() {
   rm -rf dist/
 
-  build x86_64-apple-darwin wai
-  build x86_64-unknown-linux-gnu wai
+  build x86_64-apple-darwin gid
+  build aarch64-apple-darwin gid
+  build x86_64-unknown-linux-gnu gid
 }
 
 build() {
