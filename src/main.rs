@@ -1,6 +1,14 @@
-use async_recursion::async_recursion;
-use graphql_client::{GraphQLQuery, Response};
+mod cli;
 
+use anyhow::Error;
+use async_recursion::async_recursion;
+use cli::{CliArgs, Parser};
+use graphql_client::{GraphQLQuery, Response};
+use reqwest::Client;
+
+const GITHUB_URL: &str = "https://api.github.com/graphql";
+
+// impl for graphql query
 pub type URI = String;
 
 #[derive(GraphQLQuery)]
@@ -10,28 +18,27 @@ pub type URI = String;
 )]
 pub struct IssueQuery;
 
-const GITHUB_URL: &str = "https://api.github.com/graphql";
-const ORG: &str = "k-nasa";
-const REPO: &str = "wai";
-const ROOT_ISSUE_NUMBER: i64 = 1486;
-
 #[tokio::main]
-async fn main() -> Result<(), anyhow::Error> {
+async fn main() -> Result<(), Error> {
+    let args = CliArgs::parse();
+
     let token = env!("GITHUB_ACCESS_TOKEN");
+    let client = github_client(token)?;
 
-    let client = reqwest::Client::builder()
-        .user_agent("graphql-rust/0.10.0")
-        .default_headers(
-            std::iter::once((
-                reqwest::header::AUTHORIZATION,
-                reqwest::header::HeaderValue::from_str(&format!("Bearer {}", token)).unwrap(),
-            ))
-            .collect(),
-        )
-        .build()?;
+    run(client, args).await?;
 
+    Ok(())
+}
+
+async fn run(client: Client, args: CliArgs) -> Result<(), anyhow::Error> {
     println!("graph LR");
-    fetch_tracked_issue(&client, ROOT_ISSUE_NUMBER).await?;
+    fetch_tracked_issue(
+        &client,
+        args.issue_number,
+        &args.organization,
+        &args.repository,
+    )
+    .await?;
     println!(
         "classDef CLOSED fill:#8256d0,color:#FFFFFF,stroke-width:0px;
         classDef OPEN fill:#347d39,color:#FFFFFF,stroke-width:0px;"
@@ -43,12 +50,14 @@ async fn main() -> Result<(), anyhow::Error> {
 #[async_recursion]
 async fn fetch_tracked_issue(
     client: &reqwest::Client,
-    root_issue: i64,
+    root_issue: u64,
+    owner: &str,
+    repository: &str,
 ) -> Result<(), anyhow::Error> {
     let v = issue_query::Variables {
-        owner: ORG.into(),
-        repository_name: REPO.into(),
-        number: root_issue,
+        owner: owner.into(),
+        repository_name: repository.into(),
+        number: root_issue as i64,
     };
     let request_body = IssueQuery::build_query(v);
 
@@ -79,8 +88,22 @@ async fn fetch_tracked_issue(
         );
 
         println!("click {} href \"{}\" _blank", i.number, i.url);
-        fetch_tracked_issue(client, i.number).await?;
+        fetch_tracked_issue(client, i.number as u64, owner, repository).await?;
     }
 
     Ok(())
+}
+
+fn github_client(github_token: &str) -> Result<Client, Error> {
+    let client = reqwest::Client::builder()
+        .user_agent("graphql-rust/0.10.0")
+        .default_headers(
+            std::iter::once((
+                reqwest::header::AUTHORIZATION,
+                reqwest::header::HeaderValue::from_str(&format!("Bearer {}", github_token))?,
+            ))
+            .collect(),
+        )
+        .build()?;
+    Ok(client)
 }
