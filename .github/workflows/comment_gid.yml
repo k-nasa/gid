@@ -14,3 +14,4 @@ jobs:
       - uses: k-nasa/gid@main
         with:
           label: 'root'
+          github_token: ${{secrets.GITHUB_TOKEN}}
