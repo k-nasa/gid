@@ -6,13 +6,15 @@ on:
 
 jobs:
   list-issues:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
       - name: Install gid
         run: |
-          curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.0.0/gid_x86_64-unknown-linux-gnu.tar.gz
+          curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.1.0/gid_x86_64-apple-darwin.tar.gz
           tar -zxvf gid.tar.gz
-          mv gid_x86_64-unknown-linux-gnu/gid /usr/local/bin
+
+          # Move binary file to the path
+          mv gid_x86_64-apple-darwin /usr/local/bin
 
 
       - uses: actions/github-script@v6
