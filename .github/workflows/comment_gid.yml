@@ -1,8 +1,8 @@
 name: Comment gid
 
 on:
-  pull_request:
-  push:
+  schedule:
+    - cron: '* * * * *'
 
 jobs:
   list-issues:
