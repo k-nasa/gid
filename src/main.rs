@@ -28,7 +28,11 @@ async fn main() -> Result<(), anyhow::Error> {
         )
         .build()?;
 
+    println!("graph LR");
     fetch_tracked_issue(&client, ROOT_ISSUE_NUMBER).await?;
+    println!(
+        "classDef closed fill:#8256d0,color:#FFFFFF;\nclassDef open fill:#347d39,color:#FFFFFF;"
+    );
 
     Ok(())
 }
@@ -59,7 +63,17 @@ async fn fetch_tracked_issue(
         .unwrap()
     {
         let i = i.as_ref().unwrap();
-        println!("{} --> {}[\"{}\"]", root_issue, i.number, i.title);
+
+        let state = match i.state {
+            issue_query::IssueState::OPEN => "OPEN",
+            issue_query::IssueState::CLOSED => "CLOSED",
+            _ => "OTHER",
+        };
+
+        println!(
+            "{} --> {}[\"{}\"]:::{}",
+            root_issue, i.number, i.title, state
+        );
         fetch_tracked_issue(client, i.number).await?;
     }
 

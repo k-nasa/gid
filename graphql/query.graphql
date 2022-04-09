@@ -7,6 +7,7 @@ query IssueQuery($owner: String!, $repository_name: String!, $number: Int!) {
             nodes {
               number
               title
+              state
           }
       }
     }
