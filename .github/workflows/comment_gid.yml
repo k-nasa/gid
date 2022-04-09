@@ -79,14 +79,8 @@ jobs:
                         console.log(`stderr: ${stderr}`);
                         return;
                     }
-                    const mermaid = ${stdout};
+                    const mermaid = `${stdout}`;
 
-                    github.rest.issues.updateComment({
-                      owner,
-                      repo,
-                      comment_id,
-                      body,
-                    });
                     github.rest.issues.updateComment({
                       comment_id: id,
                       owner: context.repo.owner,
