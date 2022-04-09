@@ -67,7 +67,8 @@ jobs:
                 console.log("update comment!!")
                 const { exec } = require("child_process");
 
-                exec("gid -o ${context.repo.owner} -r ${context.repo.repo} -i ${issue.number}", (error, stdout, stderr) => {
+                const command = `gid -o ${context.repo.owner} -r ${context.repo.repo} -i ${issue.number}`
+                exec(command, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
                         return;
