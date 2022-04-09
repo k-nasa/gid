@@ -16,6 +16,8 @@ jobs:
 
       - uses: actions/github-script@v6
         with:
+          env:
+            GITHUB_ACCESS_TOKEN: '${{env.GITHUB_TOKEN}}'
           script: |
             const query = `
             query ($owner: String!, $name: String!, $label: String!) {
