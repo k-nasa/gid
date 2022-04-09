@@ -65,28 +65,36 @@ jobs:
                   id = comment.databaseId
                 }
               }
+
+              let mermaid = "";
+
+              const { exec } = require("child_process");
+              const command = `gid -o ${context.repo.owner} -r ${context.repo.repo} -i ${issue.number}`
+              exec(command, (error, stdout, stderr) => {
+                  if (error) {
+                      console.log(`error: ${error.message}`);
+                      return;
+                  }
+                  if (stderr) {
+                      console.log(`stderr: ${stderr}`);
+                      return;
+                  }
+                  mermaid = `${stdout}`;
+              });
+
               if (id !== null) {
-                console.log("update comment!!")
-                const { exec } = require("child_process");
-
-                const command = `gid -o ${context.repo.owner} -r ${context.repo.repo} -i ${issue.number}`
-                exec(command, (error, stdout, stderr) => {
-                    if (error) {
-                        console.log(`error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        console.log(`stderr: ${stderr}`);
-                        return;
-                    }
-                    const mermaid = `${stdout}`;
-
-                    github.rest.issues.updateComment({
-                      comment_id: id,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      body: `/generate_gid\n${mermaid}`
-                    })
-                });
+                github.rest.issues.updateComment({
+                  comment_id: id,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `/generate_gid\n${mermaid}`
+                })
+              } else {
+                github.rest.issues.createComment({
+                  issue_number: issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `/generate_gid\n${mermaid}`
+                })
               }
             }
