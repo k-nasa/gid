@@ -2,10 +2,37 @@
 
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
 
-Currently it only supports analysis with the tracking feature of GitHub issues.
+This tool can be used on github action or the command line.
+
+Currently it only supports analysis with the [tracking feature of GitHub issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-task-lists).
 Issue Description tasks and issue link analysis will be added in the future.
 
 ## DEMO
+
+### [GitHub Actions](https://github.com/marketplace/actions/grasp-issue-dependencies)
+
+Adding the following workflow will analyze the issue every minute and comment on the diagram. (This is an example of parsing an issue labeled "root".)
+
+```yml
+name: Comment gid
+on:
+  schedule:
+    - cron: '* * * * *'
+
+jobs:
+  grasp_issue:
+    runs-on: macOS-latest
+    name: Grasp issue dependencies
+    steps:
+      - uses: actions/checkout@v3
+      - uses: k-nasa/gid@master
+        with:
+          label: 'root' # Analyze the issue with the specified label
+```
+
+<img width="934" alt="スクリーンショット 2022-04-10 0 20 35" src="https://user-images.githubusercontent.com/23740172/162580458-c81677c0-f171-4eda-8e8b-c9b9bff38691.png">
+
+### CLI
 
 Let's analyze [issue 1](https://github.com/k-nasa/gid/issues/1) as a trial.
 
@@ -46,7 +73,21 @@ click 7 href "https://github.com/k-nasa/gid/issues/7" _blank
 
 ## Usage
 
-TBW
+```sh
+gid 0.1.0
+k-nasa <htilcs1115@gmail.com>
+Issue graphical tool
+
+USAGE:
+    gid --organization <ORGANIZATION> --repository <REPOSITORY> --issue-number <ISSUE_NUMBER>
+
+OPTIONS:
+    -h, --help                           Print help information
+    -i, --issue-number <ISSUE_NUMBER>
+    -o, --organization <ORGANIZATION>
+    -r, --repository <REPOSITORY>
+    -V, --version                        Print version information
+```
 
 ## Install
 
