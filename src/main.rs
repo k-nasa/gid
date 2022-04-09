@@ -20,6 +20,7 @@ pub type URI = String;
 )]
 pub struct IssueQuery;
 
+type IssueGraph = HashMap<i64, Vec<Issue>>;
 struct Issue {
     number: i64,
     title: String,
@@ -61,7 +62,7 @@ async fn run(client: Client, args: CliArgs) -> Result<(), anyhow::Error> {
     Ok(())
 }
 
-fn build_mermaid(issue_map: HashMap<i64, Vec<Issue>>) -> String {
+fn build_mermaid(issue_map: IssueGraph) -> String {
     let head = r#"
 ```mermaid
 graph LR
@@ -83,7 +84,7 @@ graph LR
         }
     }
 
-    body
+    format!("{}\n{}", head, body)
 }
 
 #[async_recursion]
