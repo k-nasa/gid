@@ -8,6 +8,7 @@ query IssueQuery($owner: String!, $repository_name: String!, $number: Int!) {
               number
               title
               state
+              url
           }
       }
     }
