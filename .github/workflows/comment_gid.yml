@@ -44,7 +44,7 @@ jobs:
                   issue(number: $number) {
                     comments(first: 100) {
                       nodes {
-                        id
+                        databaseId
                         body
                       }
                     }
@@ -62,7 +62,7 @@ jobs:
               let id = null;
               for (const comment of result.repository.issue.comments.nodes) {
                 if(comment.body.includes("/generate_gid")) {
-                  id = comment.id
+                  id = comment.databaseId
                 }
               }
               if (id !== null) {
