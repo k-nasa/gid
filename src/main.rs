@@ -22,8 +22,8 @@ pub struct IssueQuery;
 async fn main() -> Result<(), Error> {
     let args = CliArgs::parse();
 
-    let token = env!("GITHUB_ACCESS_TOKEN");
-    let client = github_client(token)?;
+    let token = std::env::var("GITHUB_ACCESS_TOKEN")?;
+    let client = github_client(&token)?;
 
     run(client, args).await?;
 
