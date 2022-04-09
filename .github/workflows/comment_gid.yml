@@ -1,4 +1,4 @@
-name: CI
+name: Comment gid
 
 on:
   pull_request:
