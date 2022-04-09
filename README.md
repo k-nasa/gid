@@ -2,9 +2,47 @@
 
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
 
+Currently it only supports analysis with the tracking feature of GitHub issues.
+Issue Description tasks and issue link analysis will be added in the future.
+
 ## DEMO
 
-TBW
+Let's analyze [issue 1](https://github.com/k-nasa/gid/issues/1) as a trial.
+
+```sh
+gid -o k-nasa -r gid -i 1
+```
+
+This command outputs the following figure. (To be exact, the mermaid script that is the basis of the figure is output.)
+
+```mermaid
+graph LR
+
+classDef CLOSED fill:#8256d0,color:#FFFFFF,stroke-width:0px;
+classDef OPEN fill:#347d39,color:#FFFFFF,stroke-width:0px;
+
+2 --> 4["Child 1"]:::CLOSED
+2 --> 5["Child 2"]:::CLOSED
+2 --> 6["Child 3"]:::CLOSED
+7 --> 8["Child 2"]:::OPEN
+7 --> 9["Child 1"]:::OPEN
+9 --> 10["Grandchild1"]:::OPEN
+9 --> 11["Grandchild2"]:::CLOSED
+1 --> 2["DEMO 1"]:::CLOSED
+1 --> 3["DEMO2"]:::OPEN
+1 --> 7["DEMO3"]:::OPEN
+
+click 4 href "https://github.com/k-nasa/gid/issues/4" _blank
+click 5 href "https://github.com/k-nasa/gid/issues/5" _blank
+click 6 href "https://github.com/k-nasa/gid/issues/6" _blank
+click 8 href "https://github.com/k-nasa/gid/issues/8" _blank
+click 9 href "https://github.com/k-nasa/gid/issues/9" _blank
+click 10 href "https://github.com/k-nasa/gid/issues/10" _blank
+click 11 href "https://github.com/k-nasa/gid/issues/11" _blank
+click 2 href "https://github.com/k-nasa/gid/issues/2" _blank
+click 3 href "https://github.com/k-nasa/gid/issues/3" _blank
+click 7 href "https://github.com/k-nasa/gid/issues/7" _blank
+```
 
 ## Usage
 
