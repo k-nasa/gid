@@ -28,6 +28,7 @@ jobs:
       - uses: k-nasa/gid@main
         with:
           label: 'root' # Analyze the issue with the specified label
+          github_token: ${{secrets.GITHUB_TOKEN}}
 ```
 
 <img width="934" alt="スクリーンショット 2022-04-10 0 20 35" src="https://user-images.githubusercontent.com/23740172/162580458-c81677c0-f171-4eda-8e8b-c9b9bff38691.png">
