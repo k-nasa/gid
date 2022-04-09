@@ -15,9 +15,9 @@ jobs:
           mv gid_x86_64-apple-darwin/gid /usr/local/bin
 
       - uses: actions/github-script@v6
+        env:
+          GITHUB_ACCESS_TOKEN: '${{env.GITHUB_TOKEN}}'
         with:
-          env:
-            GITHUB_ACCESS_TOKEN: '${{env.GITHUB_TOKEN}}'
           script: |
             const query = `
             query ($owner: String!, $name: String!, $label: String!) {
