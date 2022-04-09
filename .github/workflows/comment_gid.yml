@@ -1,6 +1,7 @@
 name: Comment gid
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '* * * * *'
 
