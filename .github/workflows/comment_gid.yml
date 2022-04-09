@@ -61,7 +61,7 @@ jobs:
               const result = await github.graphql(query, variables)
               let id = null;
               for (const comment of result.repository.issue.comments.nodes) {
-                if(comment.body.includes("GENERATED GID")) {
+                if(comment.body.includes("/generate_gid")) {
                   id = comment.id
                 }
               }
@@ -79,7 +79,20 @@ jobs:
                         console.log(`stderr: ${stderr}`);
                         return;
                     }
-                    console.log(`stdout: ${stdout}`);
+                    const mermaid = ${stdout};
+
+                    github.rest.issues.updateComment({
+                      owner,
+                      repo,
+                      comment_id,
+                      body,
+                    });
+                    github.rest.issues.updateComment({
+                      comment_id: id,
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      body: `/generate_gid\n${mermaid}`
+                    })
                 });
               }
             }
