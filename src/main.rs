@@ -34,7 +34,7 @@ async fn run(client: Client, args: CliArgs) -> Result<(), anyhow::Error> {
     println!("graph LR");
     fetch_tracked_issue(
         &client,
-        args.issue_number,
+        args.issue_number as i64,
         &args.organization,
         &args.repository,
     )
@@ -50,14 +50,14 @@ async fn run(client: Client, args: CliArgs) -> Result<(), anyhow::Error> {
 #[async_recursion]
 async fn fetch_tracked_issue(
     client: &reqwest::Client,
-    root_issue: u64,
+    root_issue: i64,
     owner: &str,
     repository: &str,
 ) -> Result<(), anyhow::Error> {
     let v = issue_query::Variables {
         owner: owner.into(),
         repository_name: repository.into(),
-        number: root_issue as i64,
+        number: root_issue,
     };
     let request_body = IssueQuery::build_query(v);
 
@@ -88,7 +88,7 @@ async fn fetch_tracked_issue(
         );
 
         println!("click {} href \"{}\" _blank", i.number, i.url);
-        fetch_tracked_issue(client, i.number as u64, owner, repository).await?;
+        fetch_tracked_issue(client, i.number, owner, repository).await?;
     }
 
     Ok(())
