@@ -29,3 +29,8 @@ jobs:
             }
             const result = await github.graphql(query, variables)
             console.log(result)
+
+            for (const issue of result.repository.issues.nodes) {
+              console.log(issue)
+            }
+          }
