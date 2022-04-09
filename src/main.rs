@@ -1,12 +1,8 @@
 use async_recursion::async_recursion;
 use graphql_client::{GraphQLQuery, Response};
+mod query;
 
-#[derive(GraphQLQuery)]
-#[graphql(
-    schema_path = "graphql/schema.docs.graphql",
-    query_path = "graphql/query.graphql"
-)]
-pub struct IssueQuery;
+use query::{issue_query, IssueQuery};
 
 const GITHUB_URL: &str = "https://api.github.com/graphql";
 const ORG: &str = "k-nasa";
