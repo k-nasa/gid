@@ -6,6 +6,8 @@ use cli::{CliArgs, Parser};
 use graphql_client::{GraphQLQuery, Response};
 use reqwest::Client;
 
+use std::collections::HashMap;
+
 const GITHUB_URL: &str = "https://api.github.com/graphql";
 
 // impl for graphql query
@@ -17,6 +19,13 @@ pub type URI = String;
     query_path = "graphql/query.graphql"
 )]
 pub struct IssueQuery;
+
+struct Issue {
+    number: i64,
+    title: String,
+    state: String,
+    url: String,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -37,7 +46,6 @@ export GITHUB_ACCESS_TOKEN=xxxx"
 }
 
 async fn run(client: Client, args: CliArgs) -> Result<(), anyhow::Error> {
-    println!("graph LR");
     fetch_tracked_issue(
         &client,
         args.issue_number as i64,
@@ -45,12 +53,37 @@ async fn run(client: Client, args: CliArgs) -> Result<(), anyhow::Error> {
         &args.repository,
     )
     .await?;
-    println!(
-        "classDef CLOSED fill:#8256d0,color:#FFFFFF,stroke-width:0px;
-        classDef OPEN fill:#347d39,color:#FFFFFF,stroke-width:0px;"
-    );
+
+    let mermaid = build_mermaid(todo!());
+
+    println!("{}", mermaid);
 
     Ok(())
+}
+
+fn build_mermaid(issue_map: HashMap<i64, Vec<Issue>>) -> String {
+    let head = r#"
+```mermaid
+graph LR
+    classDef CLOSED fill:#8256d0,color:#FFFFFF,stroke-width:0px;
+    classDef OPEN fill:#347d39,color:#FFFFFF,stroke-width:0px;
+```"#;
+
+    let mut body = String::new();
+    for (number, issues) in issue_map {
+        for issue in issues {
+            let t = format!(
+                "\t{parent} --> {child}[\"{title}\"]:::{state}\n",
+                parent = number,
+                child = issue.number,
+                title = issue.title,
+                state = issue.state
+            );
+            body += &t;
+        }
+    }
+
+    body
 }
 
 #[async_recursion]
