@@ -22,7 +22,13 @@ pub struct IssueQuery;
 async fn main() -> Result<(), Error> {
     let args = CliArgs::parse();
 
-    let token = std::env::var("GITHUB_ACCESS_TOKEN")?;
+    let token = match std::env::var("GITHUB_ACCESS_TOKEN") {
+        Ok(token) => token,
+        Err(_) => anyhow::bail!(
+            r"Please set enviroment GITHUB_ACCESS_TOKEN
+export GITHUB_ACCESS_TOKEN=xxxx"
+        ),
+    };
     let client = github_client(&token)?;
 
     run(client, args).await?;
