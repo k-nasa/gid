@@ -1,8 +1,14 @@
 use async_recursion::async_recursion;
 use graphql_client::{GraphQLQuery, Response};
-mod query;
 
-use query::{issue_query, IssueQuery};
+pub type URI = String;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "graphql/schema.docs.graphql",
+    query_path = "graphql/query.graphql"
+)]
+pub struct IssueQuery;
 
 const GITHUB_URL: &str = "https://api.github.com/graphql";
 const ORG: &str = "k-nasa";
@@ -27,7 +33,8 @@ async fn main() -> Result<(), anyhow::Error> {
     println!("graph LR");
     fetch_tracked_issue(&client, ROOT_ISSUE_NUMBER).await?;
     println!(
-        "classDef closed fill:#8256d0,color:#FFFFFF;\nclassDef open fill:#347d39,color:#FFFFFF;"
+        "classDef CLOSED fill:#8256d0,color:#FFFFFF,stroke-width:0px;
+        classDef OPEN fill:#347d39,color:#FFFFFF,stroke-width:0px;"
     );
 
     Ok(())
@@ -67,9 +74,11 @@ async fn fetch_tracked_issue(
         };
 
         println!(
-            "{} --> {}[\"{}\"]:::{}",
+            "\t{} --> {}[\"{}\"]:::{}",
             root_issue, i.number, i.title, state
         );
+
+        println!("click {} href \"{}\" _blank", i.number, i.url);
         fetch_tracked_issue(client, i.number).await?;
     }
 

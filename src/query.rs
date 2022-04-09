@@ -3,7 +3,7 @@ pub mod issue_query {
     #![allow(dead_code)]
     use std::result::Result;
     pub const OPERATION_NAME: &str = "IssueQuery";
-    pub const QUERY : & str = "query IssueQuery($owner: String!, $repository_name: String!, $number: Int!) {\n  repository(owner: $owner, name:$repository_name) {\n    name\n    issue(number: $number){\n          title\n          trackedIssues(first: 10){\n            nodes {\n              number\n              title\n              state\n          }\n      }\n    }\n  }\n}\n" ;
+    pub const QUERY : & str = "query IssueQuery($owner: String!, $repository_name: String!, $number: Int!) {\n  repository(owner: $owner, name:$repository_name) {\n    name\n    issue(number: $number){\n          title\n          trackedIssues(first: 10){\n            nodes {\n              number\n              title\n              state\n              url\n          }\n      }\n    }\n  }\n}\n" ;
     use super::*;
     use serde::{Deserialize, Serialize};
     #[allow(dead_code)]
