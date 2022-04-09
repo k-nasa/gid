@@ -1,6 +1,13 @@
 query IssueQuery($owner: String!, $repository_name: String!, $number: Int!) {
   repository(owner: $owner, name:$repository_name) {
-    name
+    issue(number: $number){
+      title
+    }
+  }
+}
+
+query TrackIssuesQuery($owner: String!, $repository_name: String!, $number: Int!) {
+  repository(owner: $owner, name:$repository_name) {
     issue(number: $number){
           title
           trackedIssues(first: 10){
