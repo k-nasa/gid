@@ -8,4 +8,4 @@ setup:
 
 .PHONY: generate
 generate:
-	graphql-client generate graphql/query.graphql --schema-path graphql/schema.docs.graphql -o ./src --help
+	graphql-client generate graphql/query.graphql --schema-path graphql/schema.docs.graphql -o ./src
