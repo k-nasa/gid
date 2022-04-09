@@ -1,4 +1,4 @@
-## (WIP) gid (Grasp issue dependencies)
+## gid (Grasp issue dependencies)
 
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
 
