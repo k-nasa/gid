@@ -18,7 +18,7 @@ curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.1.0/gid_
 tar -zxvf gid.tar.gz
 
 # Move binary file to the path
-mv gid /usr/local/bin
+mv gid_x86_64-apple-darwin/gid /usr/local/bin
 ```
 
 ## Contribution
