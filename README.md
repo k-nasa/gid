@@ -1,5 +1,9 @@
 ## gid (Grasp issue dependencies)
 
+[![Actions Status](https://github.com/k-nasa/gid/workflows/CI/badge.svg)](https://github.com/k-nasa/gid/actions)
+[![crate-name at crates.io](https://img.shields.io/crates/v/gid_cli.svg)](https://crates.io/crates/gid_cli)
+[![GitHub stars](https://img.shields.io/github/stars/k-nasa/gid?style=social)](https://github.com/k-nasa/gid/stargazers)
+
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
 
 This tool can be used on github action or the command line.
