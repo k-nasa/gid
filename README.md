@@ -2,9 +2,23 @@
 
 [![Actions Status](https://github.com/k-nasa/gid/workflows/CI/badge.svg)](https://github.com/k-nasa/gid/actions)
 [![crate-name at crates.io](https://img.shields.io/crates/v/gid_cli.svg)](https://crates.io/crates/gid_cli)
+[![GitHub license](https://img.shields.io/github/license/k-nasa/gid)](https://github.com/k-nasa/gid/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/k-nasa/gid?style=social)](https://github.com/k-nasa/gid/stargazers)
 
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
+
+```mermaid
+graph LR
+
+classDef CLOSED fill:#8256d0,color:#FFFFFF,stroke-width:0px;
+classDef OPEN fill:#347d39,color:#FFFFFF,stroke-width:0px;
+
+1 --> 2["issue1"]:::CLOSED
+1 --> 3["issue2"]:::OPEN
+2 --> 4["Child 1"]:::OPEN
+2 --> 5["Child 2"]:::CLOSED
+2 --> 6["Child 3"]:::CLOSED
+```
 
 This tool can be used on github action or the command line.
 
