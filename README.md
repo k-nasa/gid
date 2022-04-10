@@ -108,7 +108,7 @@ cargo
 
 
 ```sh
-cargo install --git https://github.com/k-nasa/gid.git
+cargo install gid_cli
 ```
 
 ## Contribution
