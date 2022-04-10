@@ -1,4 +1,4 @@
-## (WIP) gid (Grasp issue dependencies)
+## gid (Grasp issue dependencies)
 
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
 
@@ -30,6 +30,8 @@ jobs:
           label: 'root' # Analyze the issue with the specified label
           github_token: ${{secrets.GITHUB_TOKEN}}
 ```
+
+Comment by github actions.
 
 <img width="934" alt="スクリーンショット 2022-04-10 0 20 35" src="https://user-images.githubusercontent.com/23740172/162580458-c81677c0-f171-4eda-8e8b-c9b9bff38691.png">
 
