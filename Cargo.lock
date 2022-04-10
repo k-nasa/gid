@@ -299,7 +299,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gid"
+name = "gid_cli"
 version = "0.1.0"
 dependencies = [
  "anyhow",

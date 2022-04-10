@@ -4,7 +4,7 @@ pub(crate) use clap::Parser;
 #[clap(
     version = "0.1.0",
     author = "k-nasa <htilcs1115@gmail.com>",
-    about = "Issue graphical tool"
+    about = "Help project managers and project owners with easy-to-understand views of github issue dependencies."
 )]
 pub(crate) struct CliArgs {
     #[clap(short, long)]

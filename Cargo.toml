@@ -1,7 +1,13 @@
 [package]
-name = "gid"
+name = "gid_cli"
 version = "0.1.0"
 edition = "2021"
+description = "Help project managers and project owners with easy-to-understand views of github issue dependencies."
+keywords = ["cli", "gid", "github", "project-management", "mermaid"]
+categories = ["command-line-utilities", "development-tools"]
+repository = "https://github.com/k-nasa/gid"
+license="MIT"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
