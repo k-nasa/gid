@@ -13,7 +13,8 @@ This tool can be used on github action or the command line.
 Basically, it is supposed to be used in Github Action.
 
 
-It relies on GitHub's builtin mermaid support. The output format may increase in the future
+It relies on GitHub's builtin mermaid support. The output format may increase in the future.
+
 Currently it only supports analysis with the [tracking feature of GitHub issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-task-lists).
 Issue Description tasks and issue link analysis will be added in the future.
 
