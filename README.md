@@ -32,7 +32,7 @@ https://user-images.githubusercontent.com/23740172/162850243-bd4e0df7-726c-4d89-
 Adding the following workflow will analyze the issue every minute and comment on the diagram. (This is an example of parsing an issue labeled "root".)
 
 ```yml
-name: Comment issue dependencies
+name: Comment gid
 
 on:
   workflow_dispatch:
@@ -45,6 +45,10 @@ on:
       reopened,
       labeled,
     ]
+
+concurrency:
+  group: single
+  cancel-in-progress: true
 
 jobs:
   grasp_issue:
