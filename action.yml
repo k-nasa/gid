@@ -15,9 +15,17 @@ runs:
     - name: Install gid
       shell: bash
       run: |
-        curl -L -o gid.tar.gz https://github.com/k-nasa/gid/releases/download/0.0.0/gid_x86_64-apple-darwin.tar.gz
-        tar -zxvf gid.tar.gz
-        mv gid_x86_64-apple-darwin/gid /usr/local/bin
+        cargo install --version 0.1.0 gid_cli
+
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-v0.1.0
 
     - uses: actions/github-script@v6
       env:
