@@ -7,20 +7,13 @@
 
 Help project managers and project owners with easy-to-understand views of github issue dependencies.
 
-```mermaid
-graph LR
-
-classDef CLOSED fill:#8256d0,color:#FFFFFF,stroke-width:0px;
-classDef OPEN fill:#347d39,color:#FFFFFF,stroke-width:0px;
-
-1 --> 2["issue1"]:::CLOSED
-1 --> 3["issue2"]:::OPEN
-2 --> 4["Child 1"]:::OPEN
-2 --> 5["Child 2"]:::CLOSED
-2 --> 6["Child 3"]:::CLOSED
-```
+<img width="640" alt="スクリーンショット 2022-04-10 10 36 22" src="https://user-images.githubusercontent.com/23740172/162638576-77ce945e-1b46-43af-a824-44798067be55.png">
 
 This tool can be used on github action or the command line.
+Basically, it is supposed to be used in Github Action.
+
+
+It relies on GitHub's builtin mermaid support. The output format may increase in the future.
 
 Currently it only supports analysis with the [tracking feature of GitHub issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-task-lists).
 Issue Description tasks and issue link analysis will be added in the future.
