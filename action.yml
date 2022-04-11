@@ -25,7 +25,7 @@ runs:
       shell: bash
       run: |
         cargo -vV
-        cargo install --version 0.1.0 gid_cli
+        cargo install --version 0.1.0 gid_cli || true
 
     - uses: actions/github-script@v6
       env:
