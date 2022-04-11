@@ -20,7 +20,7 @@ runs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-cargo-0.1.0
+        key: ${{ runner.os }}-cargo-0.1.1
     - name: Install gid
       shell: bash
       run: |
