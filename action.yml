@@ -12,11 +12,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install gid
-      shell: bash
-      run: |
-        cargo install --version 0.1.0 gid_cli
-
     - uses: actions/cache@v3
       with:
         path: |
@@ -25,7 +20,11 @@ runs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-cargo-v0.1.0
+        key: ${{ runner.os }}-cargo-0.1.0
+    - name: Install gid
+      shell: bash
+      run: |
+        cargo install --version 0.1.0 gid_cli
 
     - uses: actions/github-script@v6
       env:
