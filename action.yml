@@ -24,7 +24,8 @@ runs:
     - name: Install gid
       shell: bash
       run: |
-        cargo install --version 0.1.0 gid_cli & echo "do not handle error"
+        cargo -vV
+        cargo install --version 0.1.0 gid_cli
 
     - uses: actions/github-script@v6
       env:
