@@ -23,7 +23,10 @@ Issue Description tasks and issue link analysis will be added in the future.
 ### [GitHub Actions](https://github.com/marketplace/actions/grasp-issue-dependencies)
 
 
-https://user-images.githubusercontent.com/23740172/162774932-95d05ba5-e8dd-491a-9c5c-d9870f144cad.mov
+
+
+https://user-images.githubusercontent.com/23740172/162850243-bd4e0df7-726c-4d89-829a-d2ef929298d0.mp4
+
 
 
 Adding the following workflow will analyze the issue every minute and comment on the diagram. (This is an example of parsing an issue labeled "root".)
