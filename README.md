@@ -25,14 +25,23 @@ Issue Description tasks and issue link analysis will be added in the future.
 Adding the following workflow will analyze the issue every minute and comment on the diagram. (This is an example of parsing an issue labeled "root".)
 
 ```yml
-name: Comment gid
+name: Comment issue dependencies
+
 on:
-  schedule:
-    - cron: '* * * * *'
+  workflow_dispatch:
+  issues:
+    types: [
+      opened,
+      edited,
+      deleted,
+      closed,
+      reopened,
+      labeled,
+    ]
 
 jobs:
   grasp_issue:
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     name: Grasp issue dependencies
     steps:
       - uses: actions/checkout@v3
