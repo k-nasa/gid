@@ -27,7 +27,9 @@ pub struct IssueQuery;
 )]
 pub struct TrackIssuesQuery;
 
-type IssueGraph = HashMap<i64, Vec<Issue>>;
+type IssueGraph = HashMap<Issue, Vec<Issue>>;
+
+#[derive(Hash, PartialEq, Eq)]
 struct Issue {
     number: i64,
     title: String,
@@ -72,11 +74,14 @@ async fn run(client: Client, args: CliArgs) -> Result<(), anyhow::Error> {
 fn build_mermaid(issue_map: IssueGraph) -> String {
     let mut body = vec![];
     let mut links = vec![];
-    for (number, issues) in issue_map {
+    for (parent_issue, issues) in issue_map {
         for issue in issues {
             let t = format!(
-                "{parent} --> {child}[\"{title} #{number}\"]:::{state}",
-                parent = number,
+                "{parent}[\"{parent_title} #{parent_number}\"]:::{parent_state} --> {child}[\"{title} #{number}\"]:::{state}",
+                parent = parent_issue.number,
+                parent_title = parent_issue.title,
+                parent_state = parent_issue.state,
+                parent_number = parent_issue.number,
                 child = issue.number,
                 title = issue.title,
                 state = issue.state,
@@ -124,7 +129,7 @@ async fn fetch_tracked_issue(
 #[async_recursion]
 async fn _fetch_tracked_issue(
     client: &reqwest::Client,
-    root_issue: i64,
+    root_issue_number: i64,
     owner: &str,
     repository: &str,
     issue_graph: &mut IssueGraph,
@@ -132,44 +137,47 @@ async fn _fetch_tracked_issue(
     let v = track_issues_query::Variables {
         owner: owner.into(),
         repository_name: repository.into(),
-        number: root_issue,
+        number: root_issue_number,
     };
     let request_body = TrackIssuesQuery::build_query(v);
 
     let res = client.post(GITHUB_URL).json(&request_body).send().await?;
     let response_body: Response<track_issues_query::ResponseData> = res.json().await?;
 
-    // FIXME unwrap地獄を修正したい
-    for i in response_body
+    let parent_issue = response_body
         .data
         .expect("Response is None")
         .repository
         .expect("Not found repository")
         .issue
-        .expect("Not found issue")
+        .expect("Not found issue");
+
+    // FIXME unwrap地獄を修正したい
+    for i in parent_issue
         .tracked_issues
         .nodes
         .expect("Not found tracked issues")
     {
         let i = i.as_ref().unwrap();
 
-        let state = match i.state {
-            track_issues_query::IssueState::OPEN => "OPEN",
-            track_issues_query::IssueState::CLOSED => "CLOSED",
-            _ => "OTHER",
-        };
-
         let issue = Issue {
             number: i.number,
             url: i.url.clone().into(),
             title: i.title.clone().into(),
-            state: state.into(),
+            state: state_to_string(&i.state),
         };
 
-        if let Some(issues) = issue_graph.get_mut(&root_issue) {
+        let parent_issue = Issue {
+            number: parent_issue.number,
+            url: parent_issue.url.clone().into(),
+            title: parent_issue.title.clone().into(),
+            state: state_to_string(&parent_issue.state),
+        };
+
+        if let Some(issues) = issue_graph.get_mut(&parent_issue) {
             issues.push(issue);
         } else {
-            issue_graph.insert(root_issue, vec![issue]);
+            issue_graph.insert(parent_issue, vec![issue]);
         }
 
         _fetch_tracked_issue(client, i.number, owner, repository, issue_graph).await?;
@@ -190,4 +198,13 @@ fn github_client(github_token: &str) -> Result<Client, Error> {
         )
         .build()?;
     Ok(client)
+}
+
+fn state_to_string(state: &track_issues_query::IssueState) -> String {
+    match state {
+        track_issues_query::IssueState::OPEN => "OPEN",
+        track_issues_query::IssueState::CLOSED => "CLOSED",
+        _ => "OTHER",
+    }
+    .to_string()
 }
