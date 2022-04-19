@@ -75,11 +75,12 @@ fn build_mermaid(issue_map: IssueGraph) -> String {
     for (number, issues) in issue_map {
         for issue in issues {
             let t = format!(
-                "{parent} --> {child}[\"{title}\"]:::{state}",
+                "{parent} --> {child}[\"{title} #{number}\"]:::{state}",
                 parent = number,
                 child = issue.number,
                 title = issue.title,
-                state = issue.state
+                state = issue.state,
+                number = issue.number,
             );
             body.push(t);
 
