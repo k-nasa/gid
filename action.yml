@@ -20,13 +20,13 @@ runs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-cargo-${{ hashFiles('~/.cargo/bin/gid') }}-0.1.2
+        key: ${{ runner.os }}-cargo-${{ hashFiles('~/.cargo/bin/gid') }}-0.1.3
 
     - name: Install gid
       shell: bash
       run: |
         cargo -vV
-        cargo install --version 0.1.2 gid_cli || true
+        cargo install --version 0.1.3 gid_cli || true
 
     - uses: actions/github-script@v6
       env:
