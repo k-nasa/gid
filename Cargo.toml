@@ -1,6 +1,6 @@
 [package]
 name = "gid_cli"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2021"
 description = "Help project managers and project owners with easy-to-understand views of github issue dependencies."
 keywords = ["cli", "gid", "github", "project-management", "mermaid"]
