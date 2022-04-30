@@ -29,12 +29,31 @@ pub struct TrackIssuesQuery;
 
 type IssueGraph = HashMap<Issue, Vec<Issue>>;
 
-#[derive(Hash, PartialEq, Eq)]
+#[derive(Clone, Hash, PartialEq, Eq)]
 struct Issue {
     number: i64,
     title: String,
     state: String,
     url: String,
+}
+
+impl Issue {
+    pub fn id(&self) -> String {
+        // NOTE own/repo/numberのような一意に定まる文字列を返したい。
+        self.url.clone()
+    }
+
+    pub fn owner(&self) -> String {
+        // NOTE https://github.com/k-nasa/gid/issues/28
+        let splited: Vec<_> = self.url.split("/").collect();
+        splited[3].to_string()
+    }
+
+    pub fn repo(&self) -> String {
+        // NOTE https://github.com/k-nasa/gid/issues/28
+        let splited: Vec<_> = self.url.split("/").collect();
+        splited[4].to_string()
+    }
 }
 
 #[tokio::main]
@@ -77,12 +96,12 @@ fn build_mermaid(issue_map: IssueGraph) -> String {
     for (parent_issue, issues) in issue_map {
         for issue in issues {
             let t = format!(
-                "{parent}[\"{parent_title} #{parent_number}\"]:::{parent_state} --> {child}[\"{title} #{number}\"]:::{state}",
-                parent = parent_issue.number,
+                "{parent_id}[\"{parent_title} #{parent_number}\"]:::{parent_state} --> {child_id}[\"{title} #{number}\"]:::{state}",
+                parent_id = parent_issue.id(),
                 parent_title = parent_issue.title,
                 parent_state = parent_issue.state,
                 parent_number = parent_issue.number,
-                child = issue.number,
+                child_id = issue.id(),
                 title = issue.title,
                 state = issue.state,
                 number = issue.number,
@@ -91,10 +110,14 @@ fn build_mermaid(issue_map: IssueGraph) -> String {
 
             links.push(format!(
                 "click {} href \"{}\" _blank",
-                issue.number, issue.url
+                issue.id(),
+                issue.url
             ));
         }
     }
+
+    body.sort();
+    links.sort();
 
     format!(
         r#"
@@ -175,12 +198,19 @@ async fn _fetch_tracked_issue(
         };
 
         if let Some(issues) = issue_graph.get_mut(&parent_issue) {
-            issues.push(issue);
+            issues.push(issue.clone());
         } else {
-            issue_graph.insert(parent_issue, vec![issue]);
+            issue_graph.insert(parent_issue, vec![issue.clone()]);
         }
 
-        _fetch_tracked_issue(client, i.number, owner, repository, issue_graph).await?;
+        _fetch_tracked_issue(
+            client,
+            issue.number,
+            &issue.owner(),
+            &issue.repo(),
+            issue_graph,
+        )
+        .await?;
     }
 
     Ok(())
