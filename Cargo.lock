@@ -309,7 +309,7 @@ dependencies = [
 
 [[package]]
 name = "gid_cli"
-version = "0.1.3"
+version = "0.2.1"
 dependencies = [
  "anyhow",
  "async-recursion",
