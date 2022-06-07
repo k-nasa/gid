@@ -2,7 +2,7 @@ pub(crate) use clap::Parser;
 
 #[derive(Parser)]
 #[clap(
-    version = "0.1.0",
+    version = "0.2.1",
     author = "k-nasa <htilcs1115@gmail.com>",
     about = "Help project managers and project owners with easy-to-understand views of github issue dependencies."
 )]
